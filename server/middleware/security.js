@@ -129,7 +129,7 @@ const requestLogger = (req, res, next) => {
     ];
 
     const bodyString = JSON.stringify(req.body);
-    const hasSuspiciousContent = suspiciousPatterns.some(pattern => 
+    const hasSuspiciousContent = suspiciousPatterns.some(pattern =>
       pattern.test(bodyString)
     );
 
@@ -151,14 +151,18 @@ const requestLogger = (req, res, next) => {
  */
 const getCorsOptions = () => {
   const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? [process.env.CLIENT_URL] // Only allow production frontend
+    ? [
+      process.env.CLIENT_URL,
+      'http://localhost:3000', // Allow local development with production backend
+      'http://127.0.0.1:3000'
+    ]
     : [
-        'http://localhost:3000', 
-        'http://localhost:3001',
-        'http://localhost:5000', // Allow server-to-server requests in development
-        'http://127.0.0.1:3000',
-        'http://127.0.0.1:5000'
-      ]; // Allow local development
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:5000', // Allow server-to-server requests in development
+      'http://127.0.0.1:3000',
+      'http://127.0.0.1:5000'
+    ]; // Allow local development
 
   return {
     origin: (origin, callback) => {
