@@ -154,7 +154,8 @@ const getCorsOptions = () => {
     ? [
       process.env.CLIENT_URL,
       'http://localhost:3000', // Allow local development with production backend
-      'http://127.0.0.1:3000'
+      'http://127.0.0.1:3000',
+      'https://bidcart-frontend-97r1xtm60-pallab-das-projects-ebc93d81.vercel.app' // Production frontend URL
     ]
     : [
       'http://localhost:3000',
