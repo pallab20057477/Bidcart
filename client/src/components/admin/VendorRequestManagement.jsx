@@ -16,7 +16,7 @@ const VendorRequestManagement = () => {
   useEffect(() => {
     fetchRequests();
     fetchStats();
-    const socket = io('http://localhost:5000', {
+    const socket = io(process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000', {
       auth: { token: localStorage.getItem('token') }
     });
     socket.on('vendor-request:new', (newRequest) => {
@@ -34,7 +34,7 @@ const VendorRequestManagement = () => {
       if (filter !== 'all') {
         params.append('status', filter);
       }
-      
+
       const response = await api.get(`/vendor-requests?${params}`);
       setRequests(response.data.requests || []);
     } catch (error) {
@@ -59,7 +59,7 @@ const VendorRequestManagement = () => {
       await api.put(`/vendor-requests/${requestId}/approve`, {
         responseMessage: responseMessage || 'Your vendor request has been approved! Welcome to BidCart!'
       });
-      
+
       toast.success('Vendor request approved successfully!');
       fetchRequests();
       fetchStats();
@@ -81,7 +81,7 @@ const VendorRequestManagement = () => {
       await api.put(`/vendor-requests/${requestId}/reject`, {
         responseMessage
       });
-      
+
       toast.success('Vendor request rejected');
       fetchRequests();
       fetchStats();
@@ -157,7 +157,7 @@ const VendorRequestManagement = () => {
           <div className="stat-title">Pending</div>
           <div className="stat-value text-warning">{stats.pending || 0}</div>
         </div>
-        
+
         <div className="stat bg-white shadow rounded-lg">
           <div className="stat-figure text-success">
             <FaCheckCircle className="text-3xl" />
@@ -165,7 +165,7 @@ const VendorRequestManagement = () => {
           <div className="stat-title">Approved</div>
           <div className="stat-value text-success">{stats.approved || 0}</div>
         </div>
-        
+
         <div className="stat bg-white shadow rounded-lg">
           <div className="stat-figure text-error">
             <FaTimesCircle className="text-3xl" />
@@ -173,7 +173,7 @@ const VendorRequestManagement = () => {
           <div className="stat-title">Rejected</div>
           <div className="stat-value text-error">{stats.rejected || 0}</div>
         </div>
-        
+
         <div className="stat bg-white shadow rounded-lg">
           <div className="stat-figure text-info">
             <FaBuilding className="text-3xl" />
@@ -219,7 +219,7 @@ const VendorRequestManagement = () => {
               <option value="rejected">Rejected</option>
             </select>
           </div>
-          
+
           <div className="flex items-end">
             <button
               onClick={() => {
@@ -296,7 +296,7 @@ const VendorRequestManagement = () => {
                         >
                           <FaEye />
                         </button>
-                        
+
                         {request.status === 'pending' && (
                           <>
                             <button
@@ -346,7 +346,7 @@ const VendorRequestManagement = () => {
             <h3 className="font-bold text-lg mb-4">
               Vendor Request Details
             </h3>
-            
+
             <div className="space-y-6">
               {/* User Information */}
               <div>
@@ -376,8 +376,8 @@ const VendorRequestManagement = () => {
                   <div className="bg-gray-50 p-4 rounded">
                     <p>{selectedRequest.businessDetails.businessAddress.street}</p>
                     <p>
-                      {selectedRequest.businessDetails.businessAddress.city}, 
-                      {selectedRequest.businessDetails.businessAddress.state} 
+                      {selectedRequest.businessDetails.businessAddress.city},
+                      {selectedRequest.businessDetails.businessAddress.state}
                       {selectedRequest.businessDetails.businessAddress.zipCode}
                     </p>
                     <p>{selectedRequest.businessDetails.businessAddress.country}</p>
@@ -442,7 +442,7 @@ const VendorRequestManagement = () => {
                     rows={3}
                     placeholder="Enter your response message..."
                   />
-                  
+
                   <div className="flex gap-4 mt-4">
                     <button
                       onClick={() => handleApprove(selectedRequest._id)}

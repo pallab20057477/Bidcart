@@ -14,7 +14,7 @@ class SocketService {
         const token = localStorage.getItem('token');
         const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-        this.socket = io(process.env.REACT_APP_SERVER_URL || 'http://localhost:5000', {
+        this.socket = io(process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000', {
             auth: {
                 token,
                 userName: user.name,

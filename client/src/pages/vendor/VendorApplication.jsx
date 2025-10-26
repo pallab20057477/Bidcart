@@ -51,7 +51,7 @@ const VendorApplication = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) return;
-    const socket = io('http://localhost:5000', {
+    const socket = io(process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000', {
       auth: { token }
     });
     socket.on('vendor-request:status', (data) => {
@@ -117,12 +117,12 @@ const VendorApplication = () => {
     setUploading(true);
     const file = e.target.files[0];
     const uploadData = new FormData();
-    uploadData.append('image', file);
+    uploadData.append('images', file);
     try {
-      const res = await api.post('/upload/image', uploadData, {
+      const res = await api.post('/images', uploadData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-      setFormData(prev => ({ ...prev, [field]: res.data.url }));
+      setFormData(prev => ({ ...prev, [field]: res.data.imageUrls[0] }));
       toast.success('Image uploaded!');
     } catch {
       toast.error('Image upload failed');

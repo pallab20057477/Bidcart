@@ -62,21 +62,58 @@ export const NotificationProvider = ({ children }) => {
 
   useEffect(() => {
     if (!socket || !user) return;
+    
+    // Keep track of shown notifications to prevent duplicates
+    const shownNotifications = new Set();
+    
     const handleNewNotification = (data) => {
+      // Prevent duplicate notifications within 5 seconds
+      if (shownNotifications.has(data.message)) {
+        console.log('🔔 Duplicate notification prevented:', data.message);
+        return;
+      }
+      
+      shownNotifications.add(data.message);
+      setTimeout(() => shownNotifications.delete(data.message), 5000);
+      
       fetchNotifications();
       toast(data.message, { icon: '🔔' });
     };
+    
     const handleOrderStatus = (data) => {
+      const message = `Order #${data.orderId ? data.orderId.slice(-6) : ''} status updated to ${data.status}`;
+      
+      if (shownNotifications.has(message)) {
+        console.log('🔔 Duplicate order notification prevented:', message);
+        return;
+      }
+      
+      shownNotifications.add(message);
+      setTimeout(() => shownNotifications.delete(message), 5000);
+      
       fetchNotifications();
-      toast(`Order #${data.orderId ? data.orderId.slice(-6) : ''} status updated to ${data.status}`, { icon: '📦' });
+      toast(message, { icon: '📦' });
     };
+    
     const handlePaymentStatus = (data) => {
+      const message = `Payment status: ${data.paymentStatus}`;
+      
+      if (shownNotifications.has(message)) {
+        console.log('🔔 Duplicate payment notification prevented:', message);
+        return;
+      }
+      
+      shownNotifications.add(message);
+      setTimeout(() => shownNotifications.delete(message), 5000);
+      
       fetchNotifications();
-      toast(`Payment status: ${data.paymentStatus}`, { icon: '💳' });
+      toast(message, { icon: '💳' });
     };
+    
     socket.on('notification:new', handleNewNotification);
     socket.on('order:status', handleOrderStatus);
     socket.on('payment:status', handlePaymentStatus);
+    
     return () => {
       socket.off('notification:new', handleNewNotification);
       socket.off('order:status', handleOrderStatus);

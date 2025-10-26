@@ -48,7 +48,7 @@ const VendorOrders = () => {
   // Socket.IO for real-time order updates
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const socket = io('http://localhost:5000', {
+    const socket = io(process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5000', {
       transports: ['websocket', 'polling'],
       reconnection: true,
       auth: { token }
