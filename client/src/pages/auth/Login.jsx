@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { FaEye, FaEyeSlash, FaSpinner, FaShoppingCart, FaUserShield, FaStore, FaEnvelope, FaLock } from 'react-icons/fa';
 import toast from 'react-hot-toast';
@@ -15,6 +15,16 @@ const Login = () => {
 
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Show success message if redirected from registration
+  useEffect(() => {
+    if (location.state?.message) {
+      toast.success(location.state.message);
+      // Clear the state to prevent showing the message again
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location.state, navigate, location.pathname]);
 
   const handleChange = (e) => {
     setFormData({

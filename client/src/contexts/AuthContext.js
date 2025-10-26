@@ -102,7 +102,9 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await api.post('/auth/register', userData);
-      if (response.data && response.data.success) {
+      
+      // Check for successful response (status 200-299 and has token)
+      if (response.data && response.data.token && response.data.user) {
         const { token, user: newUser } = response.data;
         localStorage.setItem('token', token);
         setUser(newUser);
@@ -110,6 +112,8 @@ export const AuthProvider = ({ children }) => {
         toast.success('Account created successfully! Welcome to BidCart!');
         return { success: true };
       }
+      
+      // If we get here, something went wrong
       const errorMessage = response.data?.message || 'Registration failed';
       toast.error(errorMessage);
       return {

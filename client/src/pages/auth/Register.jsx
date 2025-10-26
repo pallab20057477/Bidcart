@@ -83,7 +83,12 @@ const Register = () => {
       });
 
       if (result.success) {
-        navigate('/');
+        // Redirect to login page after successful registration
+        navigate('/login', { 
+          state: { 
+            message: 'Registration successful! Please log in with your credentials.' 
+          } 
+        });
       }
     } catch (error) {
       console.error('Registration error:', error);
