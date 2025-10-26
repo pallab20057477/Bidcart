@@ -50,6 +50,12 @@ const ErrorHandler = require('./middleware/errorHandler');
 global.dashboardCache = new DashboardCache();
 
 const app = express();
+
+// Trust proxy for deployment platforms like Render, Heroku, etc.
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 const server = http.createServer(app);
 const io = setupSocket(server, {
   cors: {
