@@ -83,6 +83,7 @@ import VendorLayout from './components/vendor/VendorLayout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import AdminRoute from './components/auth/AdminRoute';
 import VendorRoute from './components/auth/VendorRoute';
+import DebugInfo from './components/DebugInfo';
 
 function App() {
   return (
@@ -339,6 +340,7 @@ function App() {
                       },
                     }}
                   />
+                  <DebugInfo />
                 </div>
               </Router>
             </AdminDataProvider>

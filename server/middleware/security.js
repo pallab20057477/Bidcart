@@ -150,34 +150,21 @@ const requestLogger = (req, res, next) => {
  * Secure CORS settings for production
  */
 const getCorsOptions = () => {
-  const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? [
-      process.env.CLIENT_URL,
-      'http://localhost:3000', // Allow local development with production backend
-      'http://127.0.0.1:3000',
-      'https://bidcart-frontend-97r1xtm60-pallab-das-projects-ebc93d81.vercel.app', // Old Vercel URL
-      'https://bidcartt.onrender.com' // New Render URL
-    ]
-    : [
-      'http://localhost:3000',
-      'http://localhost:3001',
-      'http://localhost:5000', // Allow server-to-server requests in development
-      'http://127.0.0.1:3000',
-      'http://127.0.0.1:5000'
-    ]; // Allow local development
-
-  console.log('🔧 CORS Configuration:', {
-    NODE_ENV: process.env.NODE_ENV,
-    CLIENT_URL: process.env.CLIENT_URL,
-    allowedOrigins
-  });
-
+  console.log('🔧 CORS Configuration - ALLOWING ALL ORIGINS FOR DEBUGGING');
+  console.log('🔧 NODE_ENV:', process.env.NODE_ENV);
+  console.log('🔧 CLIENT_URL:', process.env.CLIENT_URL);
+  
+  // Completely permissive CORS for debugging
   return {
-    origin: true, // Temporarily allow all origins for debugging
+    origin: function (origin, callback) {
+      console.log('🌐 CORS request from origin:', origin);
+      console.log('✅ ALLOWING ALL ORIGINS');
+      callback(null, true);
+    },
     credentials: true,
     optionsSuccessStatus: 200,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin', 'Access-Control-Allow-Origin']
   };
 };
 
