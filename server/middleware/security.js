@@ -166,26 +166,14 @@ const getCorsOptions = () => {
       'http://127.0.0.1:5000'
     ]; // Allow local development
 
+  console.log('🔧 CORS Configuration:', {
+    NODE_ENV: process.env.NODE_ENV,
+    CLIENT_URL: process.env.CLIENT_URL,
+    allowedOrigins
+  });
+
   return {
-    origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, Postman, etc.)
-      if (!origin) return callback(null, true);
-
-      // In development, be more permissive
-      if (process.env.NODE_ENV !== 'production') {
-        // Allow localhost and 127.0.0.1 with any port in development
-        if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
-          return callback(null, true);
-        }
-      }
-
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        console.warn(`⚠️ CORS blocked request from: ${origin}`);
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
+    origin: true, // Temporarily allow all origins for debugging
     credentials: true,
     optionsSuccessStatus: 200,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
