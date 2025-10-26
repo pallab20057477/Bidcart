@@ -1,0 +1,124 @@
+/* Simple, professional auction styles */
+
+.countdown-item {
+  @apply flex flex-col items-center bg-white rounded-lg p-2 shadow-sm border border-gray-200 min-w-[60px];
+}
+
+.countdown-value {
+  @apply text-2xl font-bold text-gray-900;
+}
+
+.countdown-label {
+  @apply text-xs font-medium text-gray-600 uppercase tracking-wide;
+}
+
+/* Simple hover effects */
+.auction-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.auction-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Bidding button */
+.bid-button {
+  transition: all 0.2s ease;
+}
+
+.bid-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Live indicator - simple pulse */
+.live-indicator {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Simple fade in for new bids */
+.bid-entry {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide scrollbar for mobile tab navigation */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Mobile-friendly touch targets */
+@media (max-width: 640px) {
+  .countdown-item {
+    @apply min-w-[50px] p-1;
+  }
+  
+  .countdown-value {
+    @apply text-lg;
+  }
+  
+  .countdown-label {
+    @apply text-xs;
+  }
+
+  /* Ensure buttons are touch-friendly */
+  button {
+    min-height: 44px;
+  }
+
+  /* Better spacing on mobile */
+  .auction-card {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Focus states for accessibility */
+.auction-card:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Status badges */
+.status-badge {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.status-live {
+  @apply bg-red-500 text-white;
+}
+
+.status-ending {
+  @apply bg-orange-500 text-white;
+}
+
+.status-upcoming {
+  @apply bg-purple-500 text-white;
+}
+
+.status-completed {
+  @apply bg-gray-500 text-white;
+}
