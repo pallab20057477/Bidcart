@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🛒 BidCart - Advanced E-commerce Platform with Real-Time Auctions
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -420,3 +421,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 Made with ❤️ by [Pallab](https://github.com/pallab20057477)
 
 </div> 
+=======
+# Bidcart
+>>>>>>> ac81aac626acb3f91ae32f876e0e2d387e25fd70
