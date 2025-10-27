@@ -341,7 +341,7 @@ function App() {
                       },
                     }}
                   />
-                  <DebugInfo />
+                  {process.env.NODE_ENV === 'development' && <DebugInfo />}
                 </div>
               </Router>
             </AdminDataProvider>
