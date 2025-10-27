@@ -78,6 +78,7 @@ import TermsOfService from './pages/TermsOfService';
 import CreateAuctionRequest from './pages/vendor/CreateAuctionRequest';
 import AdminAuctionRequests from './pages/admin/AdminAuctionRequests';
 import VendorLayout from './components/vendor/VendorLayout';
+import NotFound from './pages/NotFound';
 
 // Protected Route Component
 import ProtectedRoute from './components/auth/ProtectedRoute';
@@ -307,7 +308,7 @@ function App() {
                       <Route path="/terms" element={<TermsOfService />} />
 
                       {/* Vendor Product Routes moved under /vendor layout */}
-                      <Route path="*" element={<ErrorPage />} />
+                      <Route path="*" element={<NotFound />} />
                     </Routes>
                     {/* Catch-all route to redirect unknown URLs to Error page */}
                     {/* <Routes>

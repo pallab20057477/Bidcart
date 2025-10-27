@@ -23,35 +23,54 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAuthStatus = async () => {
+    console.log('🔍 Checking auth status...');
     try {
       const token = localStorage.getItem('token');
+      console.log('🔑 Token found:', !!token);
+      
       if (token) {
+        console.log('📡 Making API call to /auth/me...');
         const response = await api.get('/auth/me');
+        console.log('📡 /auth/me response:', response.data);
+        
         if (response.data.success) {
           const userData = response.data.user;
+          console.log('👤 User data:', userData);
           setUser(userData);
 
           // ✅ Check admin first
           if (userData.role === 'admin') {
+            console.log('👑 User is admin');
             setCurrentRole('admin');
           } else {
+            console.log('👤 User is not admin, checking vendor status...');
             // ✅ Then check vendor
             const vendorResponse = await api.get('/auth/vendor-status');
+            console.log('🏪 Vendor response:', vendorResponse.data);
+            
             if (vendorResponse.data.success && vendorResponse.data.vendor) {
               setVendor(vendorResponse.data.vendor);
               const isApproved = vendorResponse.data.vendor.status === 'approved';
               setIsVendorApproved(isApproved);
               setCurrentRole(isApproved ? 'vendor' : 'user');
+              console.log('🏪 Vendor status:', isApproved ? 'approved' : 'pending');
             } else {
               setCurrentRole('user');
+              console.log('👤 Regular user');
             }
           }
+        } else {
+          console.log('❌ /auth/me response not successful');
         }
+      } else {
+        console.log('❌ No token found');
       }
     } catch (error) {
-      console.error('Auth check failed:', error);
+      console.error('❌ Auth check failed:', error);
+      console.error('❌ Error details:', error.response?.data);
       localStorage.removeItem('token');
     } finally {
+      console.log('✅ Auth check completed, setting loading to false');
       setLoading(false);
     }
   };
