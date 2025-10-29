@@ -418,21 +418,31 @@ const Navbar = () => {
                 </Link>
 
                 {user && (
-                  <Link
-                    to="/notifications"
-                    className="flex items-center justify-between px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-all"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <span className="flex items-center gap-3">
-                      <FaBell className="text-lg" />
-                      Notifications
-                    </span>
-                    {getUnreadCount() > 0 && (
-                      <span className="px-2 py-1 text-xs font-bold bg-red-500 text-white rounded-full">
-                        {getUnreadCount()}
+                  <>
+                    <Link
+                      to="/profile"
+                      className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-all"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <FaUser className="text-lg text-blue-600" />
+                      Profile
+                    </Link>
+                    <Link
+                      to="/notifications"
+                      className="flex items-center justify-between px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-all"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <span className="flex items-center gap-3">
+                        <FaBell className="text-lg" />
+                        Notifications
                       </span>
-                    )}
-                  </Link>
+                      {getUnreadCount() > 0 && (
+                        <span className="px-2 py-1 text-xs font-bold bg-red-500 text-white rounded-full">
+                          {getUnreadCount()}
+                        </span>
+                      )}
+                    </Link>
+                  </>
                 )}
 
                 {isAdmin && (
