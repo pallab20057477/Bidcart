@@ -26,6 +26,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (user) {
+      console.log('👤 Current user data:', user);
       setFormData({
         name: user.name || '',
         email: user.email || '',
@@ -71,12 +72,21 @@ const Profile = () => {
   const handleUpdateProfile = async () => {
     setLoading(true);
     try {
+      console.log('🔄 Starting profile update with data:', formData);
       const result = await updateProfile(formData);
+      console.log('📡 Profile update result:', result);
+      
       if (result.success) {
+        console.log('✅ Profile update successful');
         setEditing(false);
+        toast.success('Profile updated successfully!');
+      } else {
+        console.log('❌ Profile update failed:', result.error);
+        toast.error(result.error || 'Failed to update profile');
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to update profile');
+      console.error('❌ Profile update error:', error);
+      toast.error(error.response?.data?.message || error.message || 'Failed to update profile');
     } finally {
       setLoading(false);
     }
