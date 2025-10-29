@@ -59,16 +59,8 @@ const VendorAuctionRequests = () => {
         }
 
         try {
-            const response = await fetch(`/api/auction-requests/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            if (response.ok) {
-                fetchAuctionRequests();
-            }
+            await api.delete(`/auction-requests/${id}`);
+            fetchAuctionRequests();
         } catch (error) {
             console.error('Error deleting auction request:', error);
         }

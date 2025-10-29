@@ -133,6 +133,25 @@ app.use('/api/features', featuresRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/auction-requests', auctionRequestRoutes);
 app.use('/api/withdrawals', withdrawalRoutes);
+// Health check endpoints
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV,
+    mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+  });
+});
+
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'API is running',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV
+  });
+});
+
 app.get('/api/test-root', (req, res) => {
   console.log('Test root route hit');
   res.json({ message: 'Test root route hit' });

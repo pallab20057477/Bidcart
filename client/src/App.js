@@ -10,6 +10,7 @@ import { AdminDataProvider } from './contexts/AdminDataContext';
 // Styles
 import './styles/global.css';
 import './styles/forms.css';
+import './styles/components.css';
 import './styles/auction.css';
 
 // Components

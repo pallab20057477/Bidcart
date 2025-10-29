@@ -1,8 +1,25 @@
 import axios from 'axios';
 
+// Determine the correct API base URL
+const getApiBaseUrl = () => {
+  // Check if we have the environment variable
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  
+  // Fallback based on current domain
+  const currentDomain = window.location.hostname;
+  if (currentDomain.includes('bidcartt.onrender.com')) {
+    return 'https://bidcart-backend.onrender.com/api';
+  }
+  
+  // Local development fallback
+  return 'http://localhost:5000/api';
+};
+
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'https://bidcart-backend.onrender.com/api',
+  baseURL: getApiBaseUrl(),
   timeout: 30000, // Increased to 30 seconds
   headers: {
     'Content-Type': 'application/json',
@@ -11,8 +28,9 @@ const api = axios.create({
 
 // Log API configuration on startup
 console.log('API Configuration:', {
-  baseURL: process.env.REACT_APP_API_URL || 'https://bidcart-backend.onrender.com/api',
-  timeout: 30000
+  baseURL: getApiBaseUrl(),
+  timeout: 30000,
+  env: process.env.REACT_APP_API_URL
 });
 
 // Request interceptor to add auth token

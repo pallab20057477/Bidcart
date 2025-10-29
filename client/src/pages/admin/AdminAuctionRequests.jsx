@@ -49,21 +49,14 @@ const AdminAuctionRequests = () => {
                 params.append('status', filter);
             }
 
-            const response = await fetch(`/api/auction-requests/admin?${params}`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                // Filter out any null/undefined requests
-                const validRequests = (data.docs || data.auctionRequests || []).filter(request => 
-                    request && request._id
-                );
-                setRequests(validRequests);
-                setTotalPages(data.totalPages || 1);
-            }
+            const response = await api.get(`/auction-requests/admin?${params}`);
+            const data = response.data;
+            // Filter out any null/undefined requests
+            const validRequests = (data.docs || data.auctionRequests || []).filter(request => 
+                request && request._id
+            );
+            setRequests(validRequests);
+            setTotalPages(data.totalPages || 1);
         } catch (error) {
             console.error('Error fetching auction requests:', error);
         } finally {
@@ -73,16 +66,8 @@ const AdminAuctionRequests = () => {
 
     const fetchStats = async () => {
         try {
-            const response = await fetch('/api/auction-requests/admin/stats', {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                setStats(data);
-            }
+            const response = await api.get('/auction-requests/admin/stats');
+            setStats(response.data);
         } catch (error) {
             console.error('Error fetching stats:', error);
         }
@@ -113,23 +98,10 @@ const AdminAuctionRequests = () => {
 
         setActionLoading(true);
         try {
-            const response = await fetch(`/api/auction-requests/${selectedRequest._id}/approve`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify(approvalData)
-            });
-
-            if (response.ok) {
-                setShowApproveModal(false);
-                fetchAuctionRequests();
-                fetchStats();
-            } else {
-                const data = await response.json();
-                alert(data.message || 'Failed to approve request');
-            }
+            await api.post(`/auction-requests/${selectedRequest._id}/approve`, approvalData);
+            setShowApproveModal(false);
+            fetchAuctionRequests();
+            fetchStats();
         } catch (error) {
             console.error('Error approving request:', error);
             alert('An error occurred');
@@ -146,23 +118,10 @@ const AdminAuctionRequests = () => {
 
         setActionLoading(true);
         try {
-            const response = await fetch(`/api/auction-requests/${selectedRequest._id}/reject`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({ message: rejectionMessage })
-            });
-
-            if (response.ok) {
-                setShowRejectModal(false);
-                fetchAuctionRequests();
-                fetchStats();
-            } else {
-                const data = await response.json();
-                alert(data.message || 'Failed to reject request');
-            }
+            await api.post(`/auction-requests/${selectedRequest._id}/reject`, { message: rejectionMessage });
+            setShowRejectModal(false);
+            fetchAuctionRequests();
+            fetchStats();
         } catch (error) {
             console.error('Error rejecting request:', error);
             alert('An error occurred');

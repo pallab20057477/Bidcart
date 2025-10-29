@@ -1,6 +1,25 @@
-/* Professional Form Input Styles */
+/* BidCart Form System - Professional and Accessible */
 
-/* Base input styles - Override black text */
+/* Base form styles */
+.form-group {
+  margin-bottom: var(--space-lg);
+}
+
+.form-label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.form-label.required::after {
+  content: ' *';
+  color: var(--color-error);
+}
+
+/* Input styles - Clean and consistent */
+.form-input,
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -13,28 +32,41 @@ input[type="datetime-local"],
 input[type="time"],
 textarea,
 select {
-  color: #1f2937 !important; /* Gray-800 - Professional dark gray for better readability */
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--color-text-primary) !important;
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: all var(--duration-normal) ease;
 }
 
-/* Placeholder text styling */
-input::placeholder,
-textarea::placeholder {
-  color: #9ca3af !important; /* Gray-400 - Subtle placeholder */
-  opacity: 1 !important;
-}
-
-/* Focus states */
+.form-input:focus,
 input:focus,
 textarea:focus,
 select:focus {
-  color: #111827 !important; /* Gray-900 - Darker on focus for better readability */
+  outline: none;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+  color: var(--color-text-primary) !important;
 }
 
-/* Hover states */
+/* Placeholder and interaction states */
+.form-input::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted) !important;
+  opacity: 1 !important;
+}
+
+.form-input:hover:not(:focus),
 input:hover:not(:focus),
 textarea:hover:not(:focus),
 select:hover:not(:focus) {
-  color: #111827 !important; /* Ensure text stays dark on hover */
+  border-color: var(--color-border-dark);
+  color: var(--color-text-primary) !important;
 }
 
 /* Disabled states */

@@ -1,9 +1,25 @@
 services:
+  # Backend API Service
+  - type: web
+    name: bidcart-backend
+    env: node
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CLIENT_URL
+        value: https://bidcartt.onrender.com
+    
+  # Frontend Static Site
   - type: web
     name: bidcart-frontend
     env: static
-    buildCommand: cd client && npm install && npm run build && cp client/build/index.html client/build/404.html
+    buildCommand: cd client && npm install && npm run build && cp build/index.html build/404.html
     staticPublishPath: ./client/build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://bidcart-backend.onrender.com/api
     routes:
       - type: rewrite
         source: /*
