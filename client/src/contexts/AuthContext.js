@@ -158,6 +158,45 @@ export const AuthProvider = ({ children }) => {
     setIsVendorApproved(false);
   };
 
+  const updateProfile = async (profileData) => {
+    try {
+      console.log('🔄 Updating profile with data:', profileData);
+      const response = await api.put('/auth/profile', profileData);
+      console.log('📡 Profile update response:', response.data);
+      
+      if (response.data && response.data.user) {
+        const updatedUser = response.data.user;
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        toast.success('Profile updated successfully!');
+        return { success: true, user: updatedUser };
+      }
+      
+      // Handle different response formats
+      if (response.data && response.data.success) {
+        const updatedUser = response.data.data || response.data.user;
+        if (updatedUser) {
+          setUser(updatedUser);
+          localStorage.setItem('user', JSON.stringify(updatedUser));
+        }
+        toast.success(response.data.message || 'Profile updated successfully!');
+        return { success: true, user: updatedUser };
+      }
+      
+      toast.success('Profile updated successfully!');
+      return { success: true };
+    } catch (error) {
+      console.error('❌ Profile update failed:', error);
+      console.error('❌ Error response:', error.response?.data);
+      
+      const errorMessage = error.response?.data?.message || 
+                          error.response?.data?.error || 
+                          'Failed to update profile';
+      toast.error(errorMessage);
+      return { success: false, error: errorMessage };
+    }
+  };
+
   const switchRole = (role) => {
     // Prevent role switch if vendor is approved
     if (isVendorApproved && currentRole === 'vendor') {
@@ -188,6 +227,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    updateProfile,
     switchRole,
     getCurrentUser,
     getCurrentRole,
