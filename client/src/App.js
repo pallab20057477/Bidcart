@@ -100,7 +100,6 @@ function App() {
                     <Routes>
                       {/* Public Routes */}
                       <Route path="/" element={<Home />} />
-                      <Route path="/test" element={<div>React Router is working! Build: {new Date().toISOString()}</div>} />
                       <Route path="/login" element={<Login />} />
                       <Route path="/register" element={<Register />} />
                       <Route path="/products" element={<Products />} />

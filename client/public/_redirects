@@ -1,1 +1,14 @@
+# Handle client-side routing for React SPA
 /*    /index.html   200
+
+# Specific routes that should always serve index.html
+/admin/*    /index.html   200
+/vendor/*   /index.html   200
+/products/* /index.html   200
+/auction    /index.html   200
+/login      /index.html   200
+/register   /index.html   200
+/profile    /index.html   200
+/cart       /index.html   200
+/checkout   /index.html   200
+/orders/*   /index.html   200
