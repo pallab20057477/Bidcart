@@ -1,0 +1,277 @@
+/* Professional Form Input Styles */
+
+/* Base input styles - Override black text */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"],
+textarea,
+select {
+  color: #1f2937 !important; /* Gray-800 - Professional dark gray for better readability */
+}
+
+/* Placeholder text styling */
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af !important; /* Gray-400 - Subtle placeholder */
+  opacity: 1 !important;
+}
+
+/* Focus states */
+input:focus,
+textarea:focus,
+select:focus {
+  color: #111827 !important; /* Gray-900 - Darker on focus for better readability */
+}
+
+/* Hover states */
+input:hover:not(:focus),
+textarea:hover:not(:focus),
+select:hover:not(:focus) {
+  color: #111827 !important; /* Ensure text stays dark on hover */
+}
+
+/* Disabled states */
+input:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: #f9fafb !important; /* Gray-50 */
+  color: #6b7280 !important; /* Gray-500 */
+  border-color: #e5e7eb !important; /* Gray-200 */
+  cursor: not-allowed !important;
+}
+
+/* Error states */
+input.error,
+textarea.error,
+select.error,
+input[aria-invalid="true"],
+textarea[aria-invalid="true"],
+select[aria-invalid="true"] {
+  border-color: #ef4444 !important; /* Red-500 */
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Success states */
+input.success,
+textarea.success,
+select.success {
+  border-color: #10b981 !important; /* Green-500 */
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+}
+
+/* DaisyUI component overrides */
+.input,
+.textarea,
+.select {
+  color: #374151 !important;
+  background-color: #ffffff !important;
+  border-color: #d1d5db !important;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  color: #111827 !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Input with icons and relative positioning */
+.input-group input,
+.relative input,
+input.w-full,
+input.block {
+  color: #1f2937 !important; /* Ensure dark text for readability */
+}
+
+/* Specific overrides for common Tailwind patterns */
+.bg-gray-50\/50 input,
+.bg-white input,
+input.bg-gray-50\/50,
+input.bg-white {
+  color: #1f2937 !important;
+}
+
+/* Override any potential black text */
+input[style*="color: black"],
+input[style*="color: #000"],
+input[style*="color: rgb(0, 0, 0)"] {
+  color: #1f2937 !important;
+}
+
+/* Form labels */
+label {
+  color: #374151 !important;
+  font-weight: 500 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Checkbox and radio buttons */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: #3b82f6 !important; /* Blue accent */
+}
+
+/* File inputs */
+input[type="file"] {
+  color: #374151 !important;
+  background-color: #ffffff !important;
+  border: 1px dashed #d1d5db !important;
+  border-radius: 0.5rem !important;
+  padding: 1rem !important;
+}
+
+input[type="file"]:hover {
+  border-color: #3b82f6 !important;
+  background-color: #f8fafc !important;
+}
+
+/* Search inputs specific styling */
+input[type="search"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
+/* Select dropdown arrow */
+select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e") !important;
+  background-position: right 0.5rem center !important;
+  background-repeat: no-repeat !important;
+  background-size: 1.5em 1.5em !important;
+  padding-right: 2.5rem !important;
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .dark input[type="text"],
+  .dark input[type="email"],
+  .dark input[type="password"],
+  .dark input[type="number"],
+  .dark input[type="tel"],
+  .dark input[type="url"],
+  .dark input[type="search"],
+  .dark input[type="date"],
+  .dark input[type="datetime-local"],
+  .dark input[type="time"],
+  .dark textarea,
+  .dark select {
+    color: #f9fafb !important; /* Gray-50 */
+    background-color: #374151 !important; /* Gray-700 */
+    border-color: #4b5563 !important; /* Gray-600 */
+  }
+
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: #9ca3af !important; /* Gray-400 */
+  }
+
+  .dark input:focus,
+  .dark textarea:focus,
+  .dark select:focus {
+    color: #ffffff !important;
+    border-color: #60a5fa !important; /* Blue-400 */
+    background-color: #374151 !important;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
+  input[type="date"],
+  input[type="datetime-local"],
+  input[type="time"],
+  textarea,
+  select {
+    font-size: 16px !important; /* Prevent zoom on iOS */
+  }
+}
+/* A
+dditional professional form enhancements */
+
+/* Better contrast for form labels */
+label,
+.form-label,
+.block.text-sm {
+  color: #374151 !important; /* Gray-700 for labels */
+  font-weight: 500 !important;
+}
+
+/* Professional input focus ring */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}
+
+/* Better styling for required field indicators */
+.required::after,
+label.required::after {
+  content: ' *';
+  color: #ef4444 !important; /* Red-500 */
+}
+
+/* Professional button text color */
+button {
+  color: inherit !important;
+}
+
+button[type="submit"] {
+  color: white !important;
+}
+
+/* Ensure good contrast for all text inputs regardless of framework */
+input,
+textarea,
+select {
+  -webkit-text-fill-color: #1f2937 !important;
+  -webkit-opacity: 1 !important;
+}
+
+/* Fix for autofill styles */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #1f2937 !important;
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+/* Professional validation styles */
+.is-valid,
+.was-validated .form-control:valid {
+  border-color: #10b981 !important;
+  color: #1f2937 !important;
+}
+
+.is-invalid,
+.was-validated .form-control:invalid {
+  border-color: #ef4444 !important;
+  color: #1f2937 !important;
+}
+
+/* Ensure text visibility in all states */
+input:not(:placeholder-shown),
+textarea:not(:placeholder-shown),
+select:not([value=""]) {
+  color: #1f2937 !important;
+}

@@ -2,14 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <link rel="icon" href="/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="BidCart - Online Auction Platform" />
+  <link rel="apple-touch-icon" href="/logo192.png" />
+  <link rel="manifest" href="/manifest.json" />
   <title>BidCart</title>
   <script>
-    // Redirect to index.html for client-side routing
-    window.location.replace('/');
+    // Single Page App (SPA) routing fix for Render static sites
+    // This script preserves the intended URL when a 404 occurs
+    (function(l) {
+      if (l.search[1] === '/' ) {
+        var decoded = l.search.slice(1).split('&').map(function(s) { 
+          return s.replace(/~and~/g, '&')
+        }).join('?');
+        window.history.replaceState(null, null,
+            l.pathname.slice(0, -1) + decoded + l.hash
+        );
+      }
+    }(window.location))
   </script>
 </head>
 <body>
-  <div>Redirecting...</div>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  
+  <!-- Loading indicator while redirecting -->
+  <div id="spa-loading" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; text-align: center; padding: 100px 20px; background: #f8fafc; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+    <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); max-width: 400px;">
+      <div style="width: 50px; height: 50px; border: 4px solid #e2e8f0; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 24px;"></div>
+      <h2 style="color: #1e293b; margin: 0 0 12px; font-size: 24px; font-weight: 600;">Loading BidCart</h2>
+      <p style="color: #64748b; margin: 0; font-size: 16px;">Please wait while we load your page...</p>
+    </div>
+  </div>
+  
+  <div id="root"></div>
+  
+  <style>
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Hide loading when React app loads */
+    #root:not(:empty) ~ #spa-loading {
+      display: none !important;
+    }
+  </style>
+  
+  <script>
+    // Hide loading indicator once React loads
+    setTimeout(function() {
+      var loading = document.getElementById('spa-loading');
+      if (loading && document.getElementById('root').children.length > 0) {
+        loading.style.display = 'none';
+      }
+    }, 1000);
+  </script>
 </body>
 </html>
