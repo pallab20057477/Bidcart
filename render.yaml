@@ -5,6 +5,11 @@ services:
     buildCommand: cd client && npm install && npm run build
     staticPublishPath: ./client/build
     routes:
+      # Serve static assets normally
+      - type: rewrite
+        source: /static/*
+        destination: /static/:splat
+      # Serve index.html for all other routes (SPA routing)
       - type: rewrite
         source: /*
         destination: /index.html
