@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import api from '../utils/api';
-import { FaSearch, FaFilter, FaTimes } from 'react-icons/fa';
+import { FaSearch, FaFilter, FaTimes, FaSpinner } from 'react-icons/fa';
 
 import ProductCard from '../components/products/ProductCard';
 
@@ -41,10 +41,15 @@ const Products = ({ modeOverride }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searching, setSearching] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [categories, setCategories] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
+  
+  // Search states
+  const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
+  const searchTimeoutRef = useRef(null);
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -73,12 +78,22 @@ const Products = ({ modeOverride }) => {
       sortOrder: searchParams.get('sortOrder') || 'desc'
     };
     setFilters(newFilters);
+    setSearchInput(newFilters.search); // Update search input when URL changes
     setCurrentPage(1);
   }, [searchParams, modeOverride]);
 
   useEffect(() => {
     fetchProducts();
   }, [filters, currentPage]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const fetchCategories = async () => {
     try {
@@ -89,8 +104,13 @@ const Products = ({ modeOverride }) => {
     }
   };
 
-  const fetchProducts = async () => {
-    setLoading(true);
+  const fetchProducts = async (isSearching = false) => {
+    if (isSearching) {
+      setSearching(true);
+    } else {
+      setLoading(true);
+    }
+    
     try {
       const params = new URLSearchParams({
         page: currentPage,
@@ -111,10 +131,52 @@ const Products = ({ modeOverride }) => {
       console.error('Error fetching products:', error);
     } finally {
       setLoading(false);
+      setSearching(false);
     }
   };
 
-  const handleFilterChange = (key, value) => {
+  // Debounced search function
+  const debouncedSearch = useCallback((searchTerm) => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    
+    searchTimeoutRef.current = setTimeout(() => {
+      handleFilterChange('search', searchTerm, true);
+    }, 500); // 500ms delay
+  }, []);
+
+  // Manual search function
+  const handleSearch = () => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    handleFilterChange('search', searchInput, true);
+  };
+
+  // Handle search input change
+  const handleSearchInputChange = (value) => {
+    setSearchInput(value);
+    // Only auto-search if user clears the input
+    if (value === '') {
+      debouncedSearch('');
+    }
+  };
+
+  // Handle Enter key press
+  const handleSearchKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  // Clear search
+  const clearSearch = () => {
+    setSearchInput('');
+    handleFilterChange('search', '', true);
+  };
+
+  const handleFilterChange = (key, value, isSearching = false) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
     setCurrentPage(1);
@@ -125,6 +187,12 @@ const Products = ({ modeOverride }) => {
       if (value && value !== '') newSearchParams.set(key, value);
     });
     setSearchParams(newSearchParams);
+
+    // If this is a search operation, trigger search immediately
+    if (isSearching && key === 'search') {
+      // Fetch products with search flag
+      setTimeout(() => fetchProducts(true), 0);
+    }
   };
 
   const clearFilters = () => {
@@ -138,6 +206,7 @@ const Products = ({ modeOverride }) => {
       sortOrder: 'desc'
     };
     setFilters(clearedFilters);
+    setSearchInput(''); // Clear search input
     setCurrentPage(1);
     setSearchParams({}); // Clear all URL parameters
   };
@@ -196,16 +265,51 @@ const Products = ({ modeOverride }) => {
         <div className="flex flex-col md:flex-row gap-4 items-center">
           {/* Search Bar */}
           <div className="relative flex-1 max-w-md w-full">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FaSearch className="h-5 w-5 text-gray-400" />
+            <div className="flex">
+              <div className="relative flex-1">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  {searching ? (
+                    <FaSpinner className="h-5 w-5 text-gray-400 animate-spin" />
+                  ) : (
+                    <FaSearch className="h-5 w-5 text-gray-400" />
+                  )}
+                </div>
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchInput}
+                  onChange={(e) => handleSearchInputChange(e.target.value)}
+                  onKeyPress={handleSearchKeyPress}
+                  className="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-l-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-primary text-base shadow-sm"
+                />
+                {searchInput && (
+                  <button
+                    onClick={clearSearch}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                    aria-label="Clear search"
+                  >
+                    <FaTimes className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+              <button
+                onClick={handleSearch}
+                disabled={searching}
+                className="px-4 py-2 bg-primary text-white rounded-r-lg hover:bg-primary-focus focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                aria-label="Search"
+              >
+                {searching ? (
+                  <FaSpinner className="h-5 w-5 animate-spin" />
+                ) : (
+                  <FaSearch className="h-5 w-5" />
+                )}
+              </button>
             </div>
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={filters.search}
-              onChange={(e) => handleFilterChange('search', e.target.value)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-primary text-base shadow-sm"
-            />
+            {searchInput && searchInput !== filters.search && (
+              <div className="absolute top-full left-0 right-0 mt-1 text-xs text-gray-500 bg-yellow-50 border border-yellow-200 rounded px-2 py-1">
+                Press Enter or click Search to apply
+              </div>
+            )}
           </div>
           {/* Filter Toggle */}
           <button
