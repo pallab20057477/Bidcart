@@ -99,7 +99,36 @@ const uploadImages = async (req, res) => {
   }
 };
 
-// Define the route with proper middleware chain
+// Single image upload route
+const uploadSingleImage = async (req, res) => {
+  try {
+    console.log('📤 Received single image upload request');
+    
+    if (!req.file) {
+      return res.status(400).json({ message: 'No image provided' });
+    }
+
+    console.log('📤 Uploading single image to Cloudinary...');
+    const result = await uploadToCloudinary(req.file.buffer);
+    
+    console.log('✅ Single image uploaded to Cloudinary:', result.secure_url);
+    res.json({
+      success: true,
+      url: result.secure_url,
+      message: 'Image uploaded successfully'
+    });
+
+  } catch (error) {
+    console.error('❌ Single image upload error:', error);
+    res.status(500).json({ 
+      message: 'Image upload failed',
+      error: error.message 
+    });
+  }
+};
+
+// Define the routes with proper middleware chain
 router.post('/images', auth, upload.array('images', 5), uploadImages);
+router.post('/image', auth, upload.single('image'), uploadSingleImage);
 
 module.exports = router;

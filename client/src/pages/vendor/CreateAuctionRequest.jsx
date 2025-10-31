@@ -44,18 +44,27 @@ const CreateAuctionRequest = () => {
                 setUploading(false);
                 return;
             }
-            const urls = [];
+
+            const formDataUpload = new FormData();
+            // Append all files with the same field name 'images'
             for (const file of imageFiles) {
-                const formDataUpload = new FormData();
-                formDataUpload.append('image', file);
-                const res = await api.post('/upload/image', formDataUpload, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
-                urls.push(res.data.url);
+                formDataUpload.append('images', file);
             }
+
+            const res = await api.post('/upload/images', formDataUpload, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            // Use the correct response format
+            const urls = res.data.imageUrls || [];
             setFormData(prev => ({ ...prev, images: urls }));
-            toast.success('Images uploaded successfully!');
+            toast.success(`${urls.length} image(s) uploaded successfully!`);
+
+            // Clear the file input after successful upload
+            setImageFiles([]);
+
         } catch (err) {
+            console.error('Image upload error:', err);
             toast.error(err.response?.data?.message || 'Image upload failed');
         } finally {
             setUploading(false);
@@ -163,7 +172,7 @@ const CreateAuctionRequest = () => {
         } finally {
             setLoading(false);
         }
-    };    return (
+    }; return (
         <div className="max-w-2xl mx-auto space-y-6">
             {/* Header */}
             <div className="flex items-center space-x-4">
@@ -327,36 +336,86 @@ const CreateAuctionRequest = () => {
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             <FiUpload className="inline w-4 h-4 mr-1" />
-                            Product Images *
+                            Product Images * (Max 5 images)
                         </label>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={handleImageChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                        />
-                        <button
-                            type="button"
-                            onClick={handleImageUpload}
-                            disabled={uploading || !imageFiles.length}
-                            className="mt-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 disabled:opacity-50"
-                        >
-                            {uploading ? 'Uploading...' : 'Upload Images'}
-                        </button>
+                        <div className="space-y-3">
+                            <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={handleImageChange}
+                                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${errors.images ? 'border-red-300' : 'border-gray-300'}`}
+                            />
+
+                            {imageFiles.length > 0 && (
+                                <div className="bg-gray-50 p-3 rounded-lg">
+                                    <p className="text-sm text-gray-600 mb-2">
+                                        {imageFiles.length} file(s) selected:
+                                    </p>
+                                    <ul className="text-sm text-gray-700 space-y-1">
+                                        {Array.from(imageFiles).map((file, idx) => (
+                                            <li key={idx} className="flex items-center gap-2">
+                                                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                                                {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
+                            <button
+                                type="button"
+                                onClick={handleImageUpload}
+                                disabled={uploading || !imageFiles.length}
+                                className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            >
+                                {uploading ? (
+                                    <>
+                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                        Uploading Images...
+                                    </>
+                                ) : (
+                                    <>
+                                        <FiUpload className="w-4 h-4" />
+                                        Upload Images
+                                    </>
+                                )}
+                            </button>
+                        </div>
+
                         {formData.images.length > 0 && (
-                            <div className="flex gap-2 mt-2 flex-wrap">
-                                {formData.images.map((url, idx) => (
-                                    <img
-                                        key={idx}
-                                        src={url}
-                                        alt="Product"
-                                        className="w-20 h-20 object-cover rounded border"
-                                    />
-                                ))}
+                            <div className="mt-4">
+                                <p className="text-sm font-medium text-gray-700 mb-2">
+                                    Uploaded Images ({formData.images.length}):
+                                </p>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                    {formData.images.map((url, idx) => (
+                                        <div key={idx} className="relative group">
+                                            <img
+                                                src={url}
+                                                alt={`Product ${idx + 1}`}
+                                                className="w-full h-24 object-cover rounded-lg border border-gray-200 shadow-sm"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    const newImages = formData.images.filter((_, i) => i !== idx);
+                                                    setFormData(prev => ({ ...prev, images: newImages }));
+                                                }}
+                                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                ×
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         )}
+
                         {errors.images && <p className="mt-1 text-sm text-red-600">{errors.images}</p>}
+                        <p className="mt-1 text-xs text-gray-500">
+                            Supported formats: JPG, PNG, GIF. Max file size: 5MB per image.
+                        </p>
                     </div>
 
                     {/* Auction Period */}
