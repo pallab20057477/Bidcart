@@ -127,6 +127,16 @@ const uploadSingleImage = async (req, res) => {
   }
 };
 
+// Test route to check if upload routes are loaded
+router.get('/test', (req, res) => {
+  console.log('✅ Upload routes are loaded and accessible');
+  res.json({ 
+    message: 'Upload routes are working',
+    timestamp: new Date().toISOString(),
+    availableRoutes: ['/upload/images', '/upload/image']
+  });
+});
+
 // Define the routes with proper middleware chain
 router.post('/images', auth, upload.array('images', 5), uploadImages);
 router.post('/image', auth, upload.single('image'), uploadSingleImage);
