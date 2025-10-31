@@ -80,7 +80,7 @@ const AddProduct = () => {
         });
 
         console.log('📤 Uploading images to server...');
-        const uploadResponse = await api.post('/images', formData, {
+        const uploadResponse = await api.post('/upload/images', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

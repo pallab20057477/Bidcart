@@ -51,8 +51,7 @@ router.post('/auctions/:id/end', adminAuth, productController.endAuctionManually
 // POST /api/products/auction - Admin creates auction product
 router.post(
   '/auction',
-  auth,
-  admin,
+  adminAuth,
   [
     body('name').isString().trim().isLength({ min: 1, max: 100 }),
     body('description').isString().trim().isLength({ min: 1, max: 2000 }),

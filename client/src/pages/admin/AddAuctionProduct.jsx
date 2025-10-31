@@ -59,15 +59,8 @@ const AddAuctionProduct = () => {
       }
       const urls = [];
       for (const file of imageFiles) {
-        // Removed client-side type and size validation as per new requirements
-        // Debug log
-        console.log('Uploading file:', file);
         const formData = new FormData();
         formData.append('image', file);
-        // Debug log FormData
-        for (let pair of formData.entries()) {
-          console.log(pair[0]+ ':', pair[1]);
-        }
         try {
           console.log('=== Sending upload request ===');
           const res = await api.post('/upload/image', formData, {
@@ -131,13 +124,25 @@ const AddAuctionProduct = () => {
           endTime: new Date(form.auction.endTime).toISOString()
         }
       };
-      await api.post('/products/auction', payload);
+      console.log('=== Submitting auction product ===');
+      console.log('Payload:', payload);
+      
+      const response = await api.post('/products/auction', payload);
+      console.log('=== Auction product created successfully ===');
+      console.log('Response:', response.data);
+      
       setSuccess('Auction product added successfully!');
       setTimeout(() => navigate('/admin/products'), 1500);
     } catch (err) {
+      console.log('=== Auction product creation error ===');
+      console.log('Error object:', err);
+      console.log('Error response:', err.response);
+      console.log('Error response data:', err.response?.data);
+      
       setError(
         err.response?.data?.errors?.[0]?.msg ||
         err.response?.data?.error ||
+        err.response?.data?.message ||
         'Failed to add auction product.'
       );
     } finally {
@@ -191,18 +196,81 @@ const AddAuctionProduct = () => {
           <input type="number" name="price" className="w-full border rounded px-3 py-2" value={form.price} onChange={handleChange} min={0} step="0.01" required />
         </div>
         <div>
-          <label className="block font-medium mb-1">Product Images</label>
-          <input type="file" accept="image/*" multiple onChange={handleImageChange} />
-          <button type="button" className="btn btn-secondary mt-2" onClick={handleImageUpload} disabled={uploading || !imageFiles.length}>
-            {uploading ? 'Uploading...' : 'Upload Images'}
-          </button>
+          <label className="block font-medium mb-2">Product Images (Max 5 images)</label>
+          <div className="space-y-3">
+            <input 
+              type="file" 
+              accept="image/*" 
+              multiple 
+              onChange={handleImageChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            />
+            
+            {imageFiles.length > 0 && (
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <p className="text-sm text-gray-600 mb-2">
+                  {imageFiles.length} file(s) selected:
+                </p>
+                <ul className="text-sm text-gray-700 space-y-1">
+                  {Array.from(imageFiles).map((file, idx) => (
+                    <li key={idx} className="flex items-center gap-2">
+                      <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                      {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            
+            <button 
+              type="button" 
+              onClick={handleImageUpload} 
+              disabled={uploading || !imageFiles.length}
+              className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {uploading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  Uploading Images...
+                </>
+              ) : (
+                'Upload Images'
+              )}
+            </button>
+          </div>
+          
           {form.images.length > 0 && (
-            <div className="flex gap-2 mt-2 flex-wrap">
-              {form.images.map((url, idx) => (
-                <img key={idx} src={url} alt="Product" className="w-20 h-20 object-cover rounded border" />
-              ))}
+            <div className="mt-4">
+              <p className="text-sm font-medium text-gray-700 mb-2">
+                Uploaded Images ({form.images.length}):
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                {form.images.map((url, idx) => (
+                  <div key={idx} className="relative group">
+                    <img
+                      src={url}
+                      alt={`Product ${idx + 1}`}
+                      className="w-full h-24 object-cover rounded-lg border border-gray-200 shadow-sm"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newImages = form.images.filter((_, i) => i !== idx);
+                        setForm({ ...form, images: newImages });
+                      }}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
+          
+          <p className="mt-1 text-xs text-gray-500">
+            Supported formats: JPG, PNG, GIF. Max file size: 5MB per image.
+          </p>
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>

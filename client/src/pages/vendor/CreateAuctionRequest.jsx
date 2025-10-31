@@ -44,27 +44,18 @@ const CreateAuctionRequest = () => {
                 setUploading(false);
                 return;
             }
-
-            const formDataUpload = new FormData();
-            // Append all files with the same field name 'images'
+            const urls = [];
             for (const file of imageFiles) {
-                formDataUpload.append('images', file);
+                const formDataUpload = new FormData();
+                formDataUpload.append('image', file);
+                const res = await api.post('/upload/image', formDataUpload, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                urls.push(res.data.url);
             }
-
-            const res = await api.post('/upload/images', formDataUpload, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-
-            // Use the correct response format
-            const urls = res.data.imageUrls || [];
             setFormData(prev => ({ ...prev, images: urls }));
-            toast.success(`${urls.length} image(s) uploaded successfully!`);
-
-            // Clear the file input after successful upload
-            setImageFiles([]);
-
+            toast.success('Images uploaded successfully!');
         } catch (err) {
-            console.error('Image upload error:', err);
             toast.error(err.response?.data?.message || 'Image upload failed');
         } finally {
             setUploading(false);

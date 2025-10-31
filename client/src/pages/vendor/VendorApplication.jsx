@@ -117,12 +117,12 @@ const VendorApplication = () => {
     setUploading(true);
     const file = e.target.files[0];
     const uploadData = new FormData();
-    uploadData.append('images', file);
+    uploadData.append('image', file);
     try {
-      const res = await api.post('/images', uploadData, {
+      const res = await api.post('/upload/image', uploadData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
-      setFormData(prev => ({ ...prev, [field]: res.data.imageUrls[0] }));
+      setFormData(prev => ({ ...prev, [field]: res.data.url }));
       toast.success('Image uploaded!');
     } catch {
       toast.error('Image upload failed');
