@@ -57,39 +57,43 @@ const AddAuctionProduct = () => {
         setUploading(false);
         return;
       }
-      const urls = [];
+      // Use multiple image upload endpoint as fallback
+      const formData = new FormData();
       for (const file of imageFiles) {
-        const formData = new FormData();
-        formData.append('image', file);
-        try {
-          console.log('=== Sending upload request ===');
-          const res = await api.post('/upload/image', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-          });
-          console.log('=== Upload response received ===');
-          console.log('Response status:', res.status);
-          console.log('Response data:', res.data);
-          urls.push(res.data.url);
-        } catch (uploadErr) {
-          console.log('=== Upload Error Details ===');
-          console.log('Error object:', uploadErr);
-          console.log('Error response:', uploadErr.response);
-          console.log('Error response data:', uploadErr.response?.data);
-          console.log('Error message:', uploadErr.message);
-          console.log('Error status:', uploadErr.response?.status);
-          
-          setError(
-            uploadErr.response?.data?.message ||
-            uploadErr.response?.data?.error ||
-            uploadErr.message ||
-            'Image upload failed. Please check the file.'
-          );
-          setUploading(false);
-          return;
-        }
+        formData.append('images', file);
       }
-      setForm({ ...form, images: urls });
-      setSuccess('Images uploaded successfully!');
+
+      try {
+        console.log('=== Sending upload request ===');
+        const res = await api.post('/upload/images', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        console.log('=== Upload response received ===');
+        console.log('Response status:', res.status);
+        console.log('Response data:', res.data);
+
+        const urls = res.data.imageUrls || [];
+        setForm({ ...form, images: urls });
+        setSuccess(`${urls.length} image(s) uploaded successfully!`);
+
+        // Clear the file input after successful upload
+        setImageFiles([]);
+
+      } catch (uploadErr) {
+        console.log('=== Upload Error Details ===');
+        console.log('Error object:', uploadErr);
+        console.log('Error response:', uploadErr.response);
+        console.log('Error response data:', uploadErr.response?.data);
+        console.log('Error message:', uploadErr.message);
+        console.log('Error status:', uploadErr.response?.status);
+
+        setError(
+          uploadErr.response?.data?.message ||
+          uploadErr.response?.data?.error ||
+          uploadErr.message ||
+          'Image upload failed. Please check the file.'
+        );
+      }
     } catch (err) {
       setError('Image upload failed.');
       console.log('General upload error:', err);
@@ -98,7 +102,7 @@ const AddAuctionProduct = () => {
     }
   };
 
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -126,11 +130,11 @@ const AddAuctionProduct = () => {
       };
       console.log('=== Submitting auction product ===');
       console.log('Payload:', payload);
-      
+
       const response = await api.post('/products/auction', payload);
       console.log('=== Auction product created successfully ===');
       console.log('Response:', response.data);
-      
+
       setSuccess('Auction product added successfully!');
       setTimeout(() => navigate('/admin/products'), 1500);
     } catch (err) {
@@ -138,7 +142,7 @@ const AddAuctionProduct = () => {
       console.log('Error object:', err);
       console.log('Error response:', err.response);
       console.log('Error response data:', err.response?.data);
-      
+
       setError(
         err.response?.data?.errors?.[0]?.msg ||
         err.response?.data?.error ||
@@ -198,14 +202,14 @@ const AddAuctionProduct = () => {
         <div>
           <label className="block font-medium mb-2">Product Images (Max 5 images)</label>
           <div className="space-y-3">
-            <input 
-              type="file" 
-              accept="image/*" 
-              multiple 
+            <input
+              type="file"
+              accept="image/*"
+              multiple
               onChange={handleImageChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
-            
+
             {imageFiles.length > 0 && (
               <div className="bg-gray-50 p-3 rounded-lg">
                 <p className="text-sm text-gray-600 mb-2">
@@ -221,10 +225,10 @@ const AddAuctionProduct = () => {
                 </ul>
               </div>
             )}
-            
-            <button 
-              type="button" 
-              onClick={handleImageUpload} 
+
+            <button
+              type="button"
+              onClick={handleImageUpload}
               disabled={uploading || !imageFiles.length}
               className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
@@ -238,7 +242,7 @@ const AddAuctionProduct = () => {
               )}
             </button>
           </div>
-          
+
           {form.images.length > 0 && (
             <div className="mt-4">
               <p className="text-sm font-medium text-gray-700 mb-2">
@@ -267,7 +271,7 @@ const AddAuctionProduct = () => {
               </div>
             </div>
           )}
-          
+
           <p className="mt-1 text-xs text-gray-500">
             Supported formats: JPG, PNG, GIF. Max file size: 5MB per image.
           </p>
