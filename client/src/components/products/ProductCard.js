@@ -73,7 +73,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <Link to={`/products/${product._id}`} className="group block">
-      <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-blue-200 transform hover:-translate-y-1">
+      <div className="bg-white rounded-2xl shadow-[0_10px_30px_rgba(15,23,42,0.08)] hover:shadow-[0_18px_42px_rgba(15,23,42,0.14)] transition-all duration-300 overflow-hidden border border-slate-100 hover:border-blue-200 transform hover:-translate-y-1">
         {/* Product Image */}
         <div className="relative overflow-hidden bg-gray-100 h-64">
           <img
@@ -89,12 +89,12 @@ const ProductCard = ({ product }) => {
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {product.mode === 'auction' ? (
-              <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+              <span className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
                 <FaGavel className="text-xs" />
                 Live Auction
               </span>
             ) : (
-              <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
                 <FaShoppingCart className="text-xs" />
                 Buy Now
               </span>
@@ -131,7 +131,7 @@ const ProductCard = ({ product }) => {
           )}
 
           {/* Product Name */}
-          <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 text-lg group-hover:text-blue-600 transition-colors" title={product.name}>
+          <h3 className="font-bold text-slate-900 mb-2 line-clamp-2 text-lg group-hover:text-blue-700 transition-colors" title={product.name}>
             {product.name}
           </h3>
 
@@ -217,7 +217,7 @@ const ProductCard = ({ product }) => {
             <Link
               to={`/products/${product._id}`}
               onClick={(e) => e.stopPropagation()}
-              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 px-4 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 text-sm"
+              className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2.5 px-4 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 text-sm"
             >
               <FaEye className="text-xs" />
               View Details
@@ -230,7 +230,7 @@ const ProductCard = ({ product }) => {
                 className={`flex-1 py-2.5 px-4 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl text-sm ${
                   justAdded
                     ? 'bg-gradient-to-r from-green-500 to-green-600 text-white'
-                    : 'bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white'
+                    : 'bg-gradient-to-r from-slate-900 to-blue-800 hover:from-slate-800 hover:to-blue-700 text-white'
                 } ${isAdding ? 'opacity-70 cursor-not-allowed' : ''}`}
               >
                 {isAdding ? (
@@ -256,7 +256,7 @@ const ProductCard = ({ product }) => {
               <Link
                 to={`/products/${product._id}`}
                 onClick={(e) => e.stopPropagation()}
-                className="flex-1 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white py-2.5 px-4 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl text-sm"
+                className="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white py-2.5 px-4 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl text-sm"
               >
                 <FaGavel className="text-xs" />
                 Place Bid

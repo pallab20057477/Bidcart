@@ -65,9 +65,9 @@ const Home = () => {
   }
 
   return (
-    <main className="bg-gray-50" role="main">
+    <main className="bg-slate-50 text-slate-900" role="main">
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] overflow-hidden bg-gradient-to-br from-blue-600 to-indigo-700" aria-label="Hero section">
+      <section className="relative min-h-[80vh] overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-800" aria-label="Hero section">
         {/* Simple background pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-full h-full" style={{
@@ -79,20 +79,20 @@ const Home = () => {
         <div className="relative z-10 flex items-center justify-center min-h-[80vh] px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center max-w-4xl mx-auto">
             {/* Main heading */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Welcome to <span className="text-yellow-300">BidCart</span>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
+              Shop with confidence on <span className="text-blue-200">BidCart</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xl sm:text-2xl text-blue-100 mb-12 max-w-2xl mx-auto">
-              Your trusted marketplace for live auctions and instant shopping
+            <p className="text-xl sm:text-2xl text-blue-100/95 mb-12 max-w-2xl mx-auto">
+              A professional marketplace experience built for trusted buying, secure bidding, and calm browsing.
             </p>
 
             {/* CTA buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
               <Link
                 to="/products"
-                className="px-8 py-4 bg-white text-blue-600 font-semibold text-lg rounded-lg shadow-lg hover:shadow-xl hover:bg-gray-50 transition-all duration-200 min-w-[200px]"
+                className="px-8 py-4 bg-white text-slate-900 font-semibold text-lg rounded-xl shadow-lg hover:shadow-xl hover:bg-slate-100 transition-all duration-200 min-w-[200px]"
               >
                 <span className="flex items-center justify-center gap-2">
                   <FaShoppingCart />
@@ -102,7 +102,7 @@ const Home = () => {
 
               <Link
                 to="/auction"
-                className="px-8 py-4 bg-transparent border-2 border-white text-white font-semibold text-lg rounded-lg hover:bg-white/10 transition-all duration-200 min-w-[200px]"
+                className="px-8 py-4 bg-transparent border-2 border-blue-100 text-white font-semibold text-lg rounded-xl hover:bg-white/10 transition-all duration-200 min-w-[200px]"
               >
                 <span className="flex items-center justify-center gap-2">
                   <FaGavel />
@@ -130,6 +130,22 @@ const Home = () => {
         </div>
       </section>
 
+      <section className="border-y border-slate-200 bg-white/90">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+              <span className="font-semibold text-slate-900">Verified sellers</span> and moderated listings for better trust.
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+              <span className="font-semibold text-slate-900">Secure checkout</span> with clear order tracking and support.
+            </div>
+            <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+              <span className="font-semibold text-slate-900">Relaxed discovery</span> with clean product browsing and live auction updates.
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features Announcements Section */}
       {features.length > 0 && (
         <section className="py-16 bg-white" aria-labelledby="announcements-title">
@@ -147,7 +163,7 @@ const Home = () => {
               {features.map(feature => (
                 <article
                   key={feature._id}
-                  className="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gray-100 overflow-hidden"
+                  className="bg-gradient-to-br from-white to-slate-50 rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-slate-100 overflow-hidden"
                   aria-labelledby={`feature-title-${feature._id}`}
                 >
                   <div className="border-l-4 border-indigo-500 pl-6">
@@ -177,7 +193,7 @@ const Home = () => {
           </header>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <article className="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow duration-200">
+            <article className="bg-slate-50 rounded-2xl p-8 border border-slate-200 hover:shadow-lg transition-shadow duration-200">
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-4">
                   <FaGavel className="text-3xl text-blue-600" />
@@ -191,7 +207,7 @@ const Home = () => {
               </div>
             </article>
 
-            <article className="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow duration-200">
+            <article className="bg-slate-50 rounded-2xl p-8 border border-slate-200 hover:shadow-lg transition-shadow duration-200">
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 rounded-lg mb-4">
                   <FaShoppingCart className="text-3xl text-indigo-600" />
@@ -205,7 +221,7 @@ const Home = () => {
               </div>
             </article>
 
-            <article className="bg-gray-50 rounded-xl p-8 hover:shadow-lg transition-shadow duration-200">
+            <article className="bg-slate-50 rounded-2xl p-8 border border-slate-200 hover:shadow-lg transition-shadow duration-200">
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-lg mb-4">
                   <FaStar className="text-3xl text-purple-600" />
@@ -223,14 +239,14 @@ const Home = () => {
       </section>
 
       {/* Upcoming Auctions Section */}
-      <section className="py-16 bg-gray-100" aria-label="Upcoming Auctions">
+      <section className="py-16 bg-slate-100" aria-label="Upcoming Auctions">
         <div className="container mx-auto px-6">
           <UpcomingAuctions />
         </div>
       </section>
 
       {/* Active Auctions Section */}
-      <section className="py-16 bg-white border-t border-gray-200" aria-labelledby="active-auctions-title">
+      <section className="py-16 bg-white border-t border-slate-200" aria-labelledby="active-auctions-title">
         <div className="container mx-auto px-6">
           <div className="flex justify-between items-center mb-8">
             <div>
@@ -241,7 +257,7 @@ const Home = () => {
             </div>
             <Link 
               to="/auction" 
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              className="px-6 py-3 bg-slate-900 text-white rounded-xl font-medium hover:bg-slate-800 transition-colors"
             >
               View All Auctions
             </Link>
@@ -276,7 +292,7 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-700" aria-label="Call to action">
+      <section className="py-20 bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-800" aria-label="Call to action">
         <div className="container mx-auto px-6 text-center text-white">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -290,7 +306,7 @@ const Home = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <Link
                 to="/products"
-                className="px-8 py-4 bg-white text-blue-600 font-semibold text-lg rounded-lg hover:bg-gray-50 transition-colors min-w-[200px]"
+                className="px-8 py-4 bg-white text-slate-900 font-semibold text-lg rounded-xl hover:bg-slate-100 transition-colors min-w-[200px]"
               >
                 <span className="flex items-center justify-center gap-2">
                   <FaShoppingCart />
@@ -300,7 +316,7 @@ const Home = () => {
 
               <Link
                 to="/register"
-                className="px-8 py-4 bg-transparent border-2 border-white text-white font-semibold text-lg rounded-lg hover:bg-white/10 transition-colors min-w-[200px]"
+                className="px-8 py-4 bg-transparent border-2 border-blue-100 text-white font-semibold text-lg rounded-xl hover:bg-white/10 transition-colors min-w-[200px]"
               >
                 <span className="flex items-center justify-center gap-2">
                   <FaUser />
